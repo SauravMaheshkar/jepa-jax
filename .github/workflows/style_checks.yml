@@ -1,0 +1,46 @@
+name: "Style Checks"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.py"
+      - ".github/workflows/style_checks.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "**.py"
+      - ".github/workflows/style_checks.yml"
+  release:
+    types: [created]
+  schedule:
+    - cron: "0 0 * * 0"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Ruff
+        run: |
+          uv run ruff check .
+
+      - name: Test with PyTest
+        run: |
+          uv run python -m pytest -m "not large"
