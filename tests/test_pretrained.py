@@ -24,9 +24,11 @@ def sample_masks(rng, B: int, num_patches: int, ratio_keep: float = 0.5):
 
 PRETRAINED_MODELS = [
     "IN1K-vit.h.14-300e",
-    "IN1K-vit.h.16-448px-300e",
-    "IN22K-vit.h.14-900e",
-    "IN22K-vit.g.16-600e",
+    # enable these for the full test suite
+    # disabled to avoid OOM on GH action runners
+    # "IN1K-vit.h.16-448px-300e",
+    # "IN22K-vit.h.14-900e",
+    # "IN22K-vit.g.16-600e",
 ]
 
 
